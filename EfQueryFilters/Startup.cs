@@ -28,27 +28,28 @@ namespace EfQueryFilters
         {
             var connection =
                 @"Server=(localdb)\mssqllocaldb;Database=EfQueryFilters.EmployeeContext;Trusted_Connection=True;";
-            services.AddDbContext<EmployeeContext>(options =>
-            {
-                options.UseSqlServer(connection);
-            });
 
-            //services.AddTransient<EmployeeContext>(serviceProvider =>
+            //services.AddDbContext<EmployeeContext>(options =>
             //{
-            //    DbContextOptionsBuilder<EmployeeContext> options = new DbContextOptionsBuilder<EmployeeContext>();
             //    options.UseSqlServer(connection);
-            //    var contextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
-            //    int companyId;
-            //    if (contextAccessor.HttpContext == null)
-            //    {
-            //        companyId = 0;
-            //    }
-            //    else
-            //    {
-            //        companyId = Convert.ToInt32(contextAccessor.HttpContext.GetRouteValue("CompanyID"));
-            //    }
-            //    return new EmployeeContext(companyId, options.Options);
             //});
+
+            services.AddTransient<EmployeeContext>(serviceProvider =>
+            {
+                DbContextOptionsBuilder<EmployeeContext> options = new DbContextOptionsBuilder<EmployeeContext>();
+                options.UseSqlServer(connection);
+                var contextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
+                int companyId;
+                if (contextAccessor.HttpContext == null)
+                {
+                    companyId = 0;
+                }
+                else
+                {
+                    companyId = Convert.ToInt32(contextAccessor.HttpContext.GetRouteValue("CompanyID"));
+                }
+                return new EmployeeContext(companyId, options.Options);
+            });
 
 
             services.AddMvc();
