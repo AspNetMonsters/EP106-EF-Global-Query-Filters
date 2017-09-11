@@ -1,0 +1,34 @@
+﻿@page
+@using EfQueryFilters.Pages
+@model EfQueryFilters.Pages.IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Title</th>
+                <th>IsDeleted</th>
+                <th>CompanyId</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var employee in Model.Employees)
+            {
+                <tr>
+                    <td>@employee.Id</td>
+                    <td>@employee.FirstName @employee.LastName</td>
+                    <td>@employee.Title</td>
+                    <td>@employee.IsDeleted</td>
+                    <td>@employee.CompanyId</td>
+                </tr>
+            }
+            </tbody>
+        </table>        
+    </div>
+</div>
